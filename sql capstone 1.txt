@@ -1,0 +1,167 @@
+-- SQL CAPSTONE 1
+--CASE-1
+--1. Create database “Assignment” and use it for upcoming problems.
+
+CREATE DATABASE Assignment
+use Assignment
+
+--2. Create a customer table which comprises of these columns - ‘customer_id’, 
+--‘first_name’, ‘last_name’, ‘email’, ‘address’, ‘city’, ‘state’, ‘zip’.
+
+create table customer ( "id" int, "first_name" varchar(20), "last_name" varchar(20), "email" varchar(30), "address" varchar(30), "city" char(15), "state" char(15), 
+"zip" );
+ 
+ select * from customer
+ insert into customer (id, first_name, last_name,email,address,city,state,zip)
+ values (1, 'Geet' , 'Raj', 'geetraju@gmail.com', 'BHills-29', 'San Jose', 'California', '412565')
+ insert into customer (id, first_name, last_name,email,address,city,state,zip)
+ values (2, 'John', 'Deere', 'john11@gmail.com', 'Seminary Road', 'San Jose', 'California', '562341'),
+ (3, 'Abram', 'Khan', 'Khanabram@gmail.com', 'Moscow Heights - 12', 'Bangalore', 'Karnataka', '457264'),
+  (4, 'Gautam', 'Sanjeev', 'Sanjugautam12@gmail.com', 'Falcon Hills - 35', 'Pune', 'Maharashtra', '444460'),
+     (5, 'Gail', 'Hardy', 'gail39@gmail.com', 'Skagen 29', 'Merida', 'Mexico', '445691');
+select * from customer
+--4. Select only the ‘first_name’ & ‘last_name’ columns from the customer table
+select first_name , last_name from customer
+--5. Select those records where ‘first_name’ starts with “G” and city is ‘San Jose’
+select * from customer where first_name like 'G%'  and city = 'San Jose' 
+----------------------------------------------------------------------------------------------------------
+--CASE-2
+--1. Create an ‘Orders’ table which comprises of these columns – ‘order_id’, ‘order_date’, ‘amount’, ‘customer_id’ and insert..
+
+CREATE table Orders (
+"order_id" char(5), "order_date" date, "amount" int, "customer_id" int);
+
+select * from Orders
+insert into Orders (order_id, order_date, amount, customer_id)
+values ('101', '01/01/2021', '5000', '2');
+insert into Orders (order_id, order_date, amount, customer_id)
+values ('102', '01/14/2021', '6500', '3'),
+('103', '01/27/2021', '2300', '4'),
+('104', '02/02/2021', '5040', '6'),
+('105', '02/07/2021', '1570', '8'),
+('106', '01/23/2021', '5000', '2'),
+('107', '01/11/2021', '600', '3'),
+('108', '02/02/2021', '2300', '4'),
+('109', '02/05/2021', '450', '4'),
+('110', '02/07/2021', '1530', '8');
+select * from customer
+select * from Orders
+--2. Make an inner join on ‘Customer’ & ‘Order’ tables on the ‘customer_id’column
+select customer.id, customer.email, customer.city, customer.state, customer.zip, Orders.order_date, orders.amount, Orders.order_id
+from customer
+inner join Orders
+on customer.id = Orders.customer_id
+
+--3. Make left and right joins on ‘Customer’ & ‘Order’ tables on the ‘customer_id’ column
+
+select customer.id, customer.email, customer.city, customer.state, customer.zip, Orders.order_date, orders.amount, Orders.order_id
+from customer
+left join Orders
+on customer.id = Orders.customer_id
+
+select customer.id, customer.email, customer.city, customer.state, customer.zip, Orders.order_date, orders.amount, Orders.order_id
+from customer
+right join Orders
+on customer.id = Orders.customer_id
+
+--4. Update ‘Orders’ table, set the amount to be 100 where ‘customer_id’ is 3
+ update Orders set amount=100
+ where customer_id = '3'
+ select * from Orders
+ ------------------------------------------------------------------------------------------------------------------------------------------
+
+ --CASE-3
+
+ --1. Use the inbuilt functions and find the minimum, maximum and average amount from the orders table
+  select min(amount) as 'Minimum amount',
+         max(amount) as 'Maximum amount',
+		 avg(amount) as 'Average amount'
+	from Orders;
+--2. Create a user-defined function “PROD”, which will multiply the given number with 10
+	go
+create FUNCTION dbo.PROD (@ int)
+RETURNS INT as
+Begin 
+	 return @*10
+	 
+End
+go
+SELECT dbo.PROD(10) as product;
+go	
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+--CASE-4
+--1. Arrange the ‘Orders’ dataset in decreasing order of amount
+SELECT * FROM Orders ORDER BY amount DESC;
+
+--2. Create a table with name ‘Employee_details1’ and comprising of these columns – ‘Emp_id’, ‘Emp_name’, ‘Emp_salary’. Enter details as below
+
+create table Employee_details1(
+ "Emp-id" int, "Emp_name" varchar(20), "Emp_salary" int );
+ Select * from Employee_details1
+ INSERT INTO Employee_details1 ("Emp-id", "Emp_name", "Emp_salary")
+ values ('101', 'Joseph Tribbiani', '25000'),
+ ('102', 'Monica Geller', '30000'),
+ ('103', 'Chandler Bing', '50000'),
+ ('104', 'Gunther', '15000'),
+ ('105', 'Rachel Green', '30000');
+
+ --3. Create another table with name ‘Employee_details2’, which comprises of same columns as first table. Enter details as listed below
+ create table Employee_details2(
+ "Emp_id" int, "Emp_name" varchar(20), "Emp_salary" int );
+ Select * from Employee_details2
+ INSERT INTO Employee_details2 ("Emp_id", "Emp_name", "Emp_salary")
+ values ('101', 'Joseph Tribbiani', '25000'),
+ ('102', 'Pjoebe Buffay', '30000'),
+ ('103', 'Chandler Bing', '50000'),
+ ('104', 'Rose Geller', '70000'),
+ ('105', 'Rachel Green', '30000');
+
+ select * from Employee_details1
+ select * from Employee_details2
+ 
+
+ --4. Apply the union operator on these two tables
+ SELECT Emp_name,Emp_salary FROM Employee_details1 
+UNION
+SELECT Emp_name, Emp_salary  FROM Employee_details2;
+
+--5. Apply the intersect operator on these two tables
+SELECT Emp_name,Emp_salary FROM Employee_details1 
+intersect
+SELECT Emp_name, Emp_salary  FROM Employee_details2;
+--6. Apply the except operator on these two tables
+SELECT Emp_name,Emp_salary FROM Employee_details1 
+except
+SELECT Emp_name, Emp_salary  FROM Employee_details2;
+-----------------------------------------------------------------------------------
+--CASE-5
+
+--1. Create a view named ‘customer_san_jose’ which comprises of only those customers who are from san jose
+CREATE VIEW customer_san_jose AS
+SELECT id, first_name, last_name, email, city, state, zip
+FROM customer
+WHERE city = 'San Jose';
+
+Select * from customer_san_jose
+
+--2. Inside a transaction, update the first name of the customer to Francis, where the last name is Jordan
+--• Rollback the transaction
+--• Set the first name of customer to Alex, where the last name is Jordan
+insert into customer (id, first_name, last_name,email,address,city)
+ values (6, 'kp' , 'jordan', 'jordan@gmail.com', 'BHills-29', 'New york')
+ select * from customer
+ delete customer
+ where last_name = 'jordan';
+begin transaction
+update customer
+ set first_name = 'Francis'
+ where last_name = 'jordan';
+ rollback transaction;
+ select * from customer;
+begin transaction
+update customer
+ set first_name = 'alex'
+ where last_name = 'jordan';
+ -----------------------------------------------
